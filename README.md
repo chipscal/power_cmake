@@ -2,10 +2,10 @@
 
 Cmake project automated build system.
 By using this build system is possible to:
-	- configure and build multiple libraries (static and shared)
-	- configure and auto execute for each target library several tests
-	- install libraries, tests and documentation into your INSTALL_ROOT
-	- it supports either Windows and Linux/Unix
+	* configure and build multiple libraries (static and shared)
+	* configure and auto execute for each target library several tests
+	* install libraries, tests and documentation into your INSTALL_ROOT
+	* it supports either Windows and Linux/Unix
 
 ## Getting started
 In order to start a manifest.cmake file has to be specified inside the ROOT.
