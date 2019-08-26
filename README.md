@@ -1,4 +1,4 @@
-# Reference Generator
+# Power cmake
 
 Cmake project automated build system.
 By using this build system is possible to:

@@ -12,8 +12,8 @@ FUNCTION(FIND_SOURCES TARGET_LIB CURRENT_DIR)
 
 	message(STATUS "-------> Entering dir: " ${CURRENT_DIR})
 
-	file(GLOB pub_header "${CURRENT_DIR}/*.h" "${CURRENT_DIR}/*.hpp")
-	file(GLOB_RECURSE priv_sources "${CURRENT_DIR}/src/*.cpp" "${CURRENT_DIR}/src/*.h" "${CURRENT_DIR}/src/*.hpp")
+	file(GLOB pub_header "${CURRENT_DIR}/*.h*")
+	file(GLOB_RECURSE priv_sources "${CURRENT_DIR}/src/*.c*" "${CURRENT_DIR}/src/*.h*")
 
 	foreach(hdr ${pub_header})
 		message(STATUS "---------------> founded header: " ${hdr})

@@ -13,7 +13,7 @@ FUNCTION(MAKE_LIB_TEST LIB_NAME TEST_DIR LIB_INCLUDE_DIRS LIB_OBJS)
 
 
 	include(${TEST_DIR}/testmanifest.cmake)
-	file(GLOB priv_sources "${TEST_DIR}/*.cpp" "${TEST_DIR}/*.h" "${TEST_DIR}/*.hpp")
+	file(GLOB priv_sources "${TEST_DIR}/*.c*" "${TEST_DIR}/*.h*")
 
 	add_executable(${TEST_NAME} ${priv_sources})
 	
@@ -33,7 +33,7 @@ FUNCTION(MAKE_LIB_TEST LIB_NAME TEST_DIR LIB_INCLUDE_DIRS LIB_OBJS)
 	list(APPEND lobjs ${TEST_ADDITIONAL_LINKED_OBJECTS} ${LIB_OBJS})
 	foreach(obj ${lobjs})
 		message(STATUS "---->Test linked objs: " ${obj})
-		target_link_libraries(${TEST_NAME} ${lobj})
+		target_link_libraries(${TEST_NAME} ${obj})
 	endforeach()
 
 	install(TARGETS ${TEST_NAME} DESTINATION "${WIN_INST_PREFIX}lib/${PROJ_NAME}")
