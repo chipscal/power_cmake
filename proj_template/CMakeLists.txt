@@ -19,16 +19,23 @@ SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_LIST_DIR})
 
 
 foreach(dir ${SUBDIRS})
+	set(LIBRARY_INCLUDE_DIRS) #clear list
+	set(LIBRARY_LINKED_OBJECTS) #clear list 
 	include(${dir}/libmanifest.cmake)
 	message("Founded new library: " ${LIBRARY_NAME})
-	MAKE_LIBRARY(${LIBRARY_NAME} ${LIBRARY_TYPE} "${LIBRARY_INCLUDE_DIRS}" "${LIBRARY_LINKED_OBJECTS}")
+	if(NOT ${LIBRARY_NAME}_EXCLUDE)
+		MAKE_LIBRARY(${LIBRARY_NAME} ${LIBRARY_TYPE} "${LIBRARY_INCLUDE_DIRS}" "${LIBRARY_LINKED_OBJECTS}")
 
-	if(BUILD_TESTS)
-		SUBDIRLIST(TESTS ${CMAKE_CURRENT_LIST_DIR}/${dir}/tests)
-		foreach(libtest ${TESTS})
-			message(STATUS "---->Founded test: " ${libtest})
-			MAKE_LIB_TEST(${LIBRARY_NAME} ${dir}/tests/${libtest} "${LIBRARY_INCLUDE_DIRS}" "${LIBRARY_LINKED_OBJECTS}") 
-		endforeach()
+		if(BUILD_TESTS)
+			SUBDIRLIST(TESTS ${CMAKE_CURRENT_LIST_DIR}/${dir}/tests)
+			foreach(libtest ${TESTS})
+				message(STATUS "---->Founded test: " ${libtest})
+				MAKE_LIB_TEST(${LIBRARY_NAME} ${dir}/tests/${libtest} "${LIBRARY_INCLUDE_DIRS}" "${LIBRARY_LINKED_OBJECTS}") 
+			endforeach()
+		endif()
+		add_definitions(-DHAVE_${LIBRARY_NAME})
+	else()
+		message(STATUS "----> excluded!")
 	endif()
 endforeach()
 
