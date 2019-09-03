@@ -24,10 +24,25 @@ FUNCTION(MAKE_LIBRARY TARGET_LIB LIB_TYPE INCLUDE_DIRS LINK_OBJ)
 
 
 	target_compile_definitions(${TARGET_LIB} PRIVATE API_EXPORTS)
+
+	set(skip_next false)
 	foreach(lobj ${LINK_OBJ})
-		message(STATUS "---->Target linked library: " ${lobj})
-		target_link_libraries(${TARGET_LIB} ${lobj})
+		
+		if(NOT skip_next AND NOT lobj MATCHES debug AND NOT lobj MATCHES optimized)
+			message(STATUS "---->Target linked library: " ${lobj})
+			target_link_libraries(${TARGET_LIB} ${lobj})
+
+		endif()
+		set(skip_next false)
+
+		if(lobj MATCHES optimized AND CMAKE_BUILD_TYPE MATCHES Debug)
+			set(skip_next true)
+		elseif(lobj MATCHES debug AND NOT CMAKE_BUILD_TYPE MATCHES Debug)
+			set(skip_next true)
+		endif()
+
 	endforeach()
+	set(skip_next)
 	
 	message(STATUS "${TARGET_LIB} LIBRARIES: " ${${TARGET_LIB}_LIBRARIES})
 
