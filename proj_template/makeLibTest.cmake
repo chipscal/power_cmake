@@ -31,10 +31,25 @@ FUNCTION(MAKE_LIB_TEST LIB_NAME TEST_DIR LIB_INCLUDE_DIRS LIB_OBJS)
 	message(STATUS "---->Test linked objs: " ${LIB_NAME})
 	target_link_libraries(${TEST_NAME} ${LIB_NAME})
 	list(APPEND lobjs ${TEST_ADDITIONAL_LINKED_OBJECTS} ${LIB_OBJS})
-	foreach(obj ${lobjs})
-		message(STATUS "---->Test linked objs: " ${obj})
-		target_link_libraries(${TEST_NAME} ${obj})
+	
+	set(skip_next false)
+	foreach(lobj ${lobjs})
+		
+		if(NOT skip_next AND NOT lobj MATCHES debug AND NOT lobj MATCHES optimized)
+			message(STATUS "---->---->Test linked objs: : " ${lobj})
+			target_link_libraries(${TEST_NAME} ${lobj})
+
+		endif()
+		set(skip_next false)
+
+		if(lobj MATCHES optimized AND CMAKE_BUILD_TYPE MATCHES Debug)
+			set(skip_next true)
+		elseif(lobj MATCHES debug AND NOT CMAKE_BUILD_TYPE MATCHES Debug)
+			set(skip_next true)
+		endif()
+
 	endforeach()
+	set(skip_next)
 
 	install(TARGETS ${TEST_NAME} DESTINATION "${WIN_INST_PREFIX}lib/${PROJ_NAME}")
 	add_test("${LIB_NAME}_${TEST_NAME}" ${TEST_NAME} ${TEST_ARGS})
